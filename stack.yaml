@@ -1,0 +1,58 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Parameters:
+  NotificationEmail:
+    Type: String
+Resources:
+  LambdaFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: lambda/index.handler
+      Runtime: nodejs4.3
+      Timeout: 10
+      MemorySize: 128
+      Policies:
+        -
+          Statement:
+            Effect: Allow
+            Action:
+            - dynamodb:Scan
+            - dynamodb:PutItem
+            - dynamodb:DeleteItem
+            Resource:
+            - !Sub "arn:aws:dynamodb:${AWS::Region}:${AWS::AccountId}:table/${DynamoDBTable}"
+        -
+          Statement:
+            Effect: Allow
+            Action:
+            - sns:Publish
+            Resource: !Ref Topic
+      Events:
+        Timer:
+          Type: Schedule
+          Properties:
+            Schedule: cron(5 6-16 ? * MON-SAT *)
+      Environment:
+        Variables:
+          SNS_TOPIC_ARN: !Ref Topic
+          TABLE_NAME: !Ref DynamoDBTable
+
+  DynamoDBTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      AttributeDefinitions:
+        - AttributeName: title
+          AttributeType: S
+      KeySchema:
+        - AttributeName: title
+          KeyType: HASH
+      ProvisionedThroughput:
+        ReadCapacityUnits: 2
+        WriteCapacityUnits: 2
+
+  Topic:
+    Type: AWS::SNS::Topic
+    Properties:
+      Subscription:
+      - Protocol: email
+        Endpoint: !Ref NotificationEmail
