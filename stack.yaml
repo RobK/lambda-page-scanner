@@ -31,7 +31,7 @@ Resources:
         Timer:
           Type: Schedule
           Properties:
-            Schedule: cron(5 6-16 ? * MON-SAT *)
+            Schedule: cron(5 6-16 ? * * *)
       Environment:
         Variables:
           SNS_TOPIC_ARN: !Ref Topic
@@ -47,8 +47,8 @@ Resources:
         - AttributeName: title
           KeyType: HASH
       ProvisionedThroughput:
-        ReadCapacityUnits: 2
-        WriteCapacityUnits: 2
+        ReadCapacityUnits: 1
+        WriteCapacityUnits: 1
 
   Topic:
     Type: AWS::SNS::Topic
