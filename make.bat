@@ -26,7 +26,7 @@ echo Deploying package...
 call aws cloudformation deploy --template-file serverless-output.yaml ^
     --stack-name lambda-page-scanner ^
     --parameter-overrides NotificationEmail=%NOTIFICATION_EMAIL% ^
-    --parameter-overrides CronSchedule=%CRONSCHEDULE% ^
+    --parameter-overrides "CronSchedule=%CRONSCHEDULE%" ^
     --capabilities CAPABILITY_IAM
 GOTO Finished
 
