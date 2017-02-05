@@ -3,6 +3,8 @@ Transform: AWS::Serverless-2016-10-31
 Parameters:
   NotificationEmail:
     Type: String
+  CronSchedule:
+    Type: String
 Resources:
   LambdaFunction:
     Type: AWS::Serverless::Function
@@ -31,7 +33,7 @@ Resources:
         Timer:
           Type: Schedule
           Properties:
-            Schedule: cron(5 6-16 ? * * *)
+            Schedule: !Sub cron(${CronSchedule})
       Environment:
         Variables:
           SNS_TOPIC_ARN: !Ref Topic

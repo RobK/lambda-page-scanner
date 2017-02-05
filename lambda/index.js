@@ -1,7 +1,19 @@
 /**
- * Created by kehoro on 26/01/17.
+ * Created by Robert Kehoe on 26/01/17.
+ * MIT License, see included project license
  */
 "use strict"
+
+// Configuration
+// This is the URL that will be queried / checked
+const urlEndPoint = 'http://www.example.com/rss.php';
+
+// This is the jQuery style selector, that will select the links you want to monitor
+const selector = 'span.title a';
+
+
+
+// Code 
 console.log("Loading function");
 const path = require('path');
 const cheerio = require('cheerio');
@@ -13,16 +25,13 @@ const AWS = require("aws-sdk");
 AWS.config.update({ region: process.env.AWS_REGION });
 const docClient = new AWS.DynamoDB.DocumentClient();
 
-const urlSearchPlaystation = 'http://haku.helmet.fi/iii/encore/search/C__S%28ps4%20%7C%20%28playstation%204%29%29__O-date__U__X0?lang=eng&suite=cobalt';
-
-
 exports.handler = (event, context, callback) => {
 
     let titleToUrl = {};
     async.waterfall([
             (callback) => {
                 request({
-                    url: urlSearchPlaystation,
+                    url: urlEndPoint,
                     headers: {
                         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, ' +
                             'like Gecko) Chrome/55.0.2883.87 Safari/537.36'
@@ -31,7 +40,7 @@ exports.handler = (event, context, callback) => {
             },
             (response, body, callback) => {
                 let $ = cheerio.load(body);
-                let titles = $('span.title a');
+                let titles = $(selector);
                 let gameTitles = [];
 
                 titles.each((i, link) => {
@@ -48,7 +57,6 @@ exports.handler = (event, context, callback) => {
                 } else {
                     callback(null, gameTitles)
                 }
-
             },
             (scannedTitles, callback) => {
 
