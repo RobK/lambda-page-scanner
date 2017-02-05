@@ -122,7 +122,7 @@ exports.handler = (event, context, callback) => {
                         "New Titles:\n";
 
                     newTitles.forEach((title) => {
-                        message += title + "\n\thttp://haku.helmet.fi" + titleToUrl[title] + "\n";
+                        message += title + "\n\t" + titleToUrl[title] + "\n";
                     });
                     message += "\nRemoved Titles (" + removedTitles.length + "):\n" + removedTitles.join("\n");
 
