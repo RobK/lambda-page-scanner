@@ -1,7 +1,8 @@
 @echo off
 
-set NOTIFICATION_EMAIL=cherrio@gmail.com
-set BUCKET_NAME=kehoro-tmp-scanner
+set NOTIFICATION_EMAIL=your-email@domain.com
+set BUCKET_NAME=your-bucket-name
+REM Every hour, at 5 past the hour, between 6 and 16 (UTC time), every day of the week, every month
 set CRONSCHEDULE=5 6-16 ? * * *
 
 IF "%1"=="deploy" (

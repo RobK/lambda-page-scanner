@@ -1,5 +1,6 @@
-NOTIFICATION_EMAIL=cherrio@gmail.com
-BUCKET_NAME=kehoro-tmp-scanner
+NOTIFICATION_EMAIL=youemail@test.com
+BUCKET_NAME=your-bucket-name
+# Every hour, at 5 past the hour, between 6 and 16 (UTC time), every day of the week, every month
 CRONSCHEDULE=5 6-16 ? * * *
 
 deploy:
